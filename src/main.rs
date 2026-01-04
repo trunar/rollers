@@ -94,7 +94,10 @@ fn perform_roll(count: u32, die: &DieSides, modifier: i32, args: &Args) {
             println!("  {:<10} {}", "Kept:", kept_strs.join(", "));
         }
 
-        println!("  {:<10} {}", "Modifier:", if modifier >= 0 { format!("+{}", modifier) } else { modifier.to_string() });
+        if modifier != 0 {
+            println!("  {:<10} {}", "Modifier:", if modifier >= 0 { format!("+{}", modifier) } else { modifier.to_string() });
+        }
+        
         println!("  {:<10} \x1b[1m{}\x1b[0m", "Total:", total);
     }
 }
@@ -122,6 +125,6 @@ fn calculate_average(count: u32, die: &DieSides, modifier: i32, args: &Args) {
     if args.quiet {
         println!("{}", total_avg);
     } else {
-        println!("Average: {:.2}", total_avg);
+        println!("\n  Average: {:.2}", total_avg);
     }
 }
