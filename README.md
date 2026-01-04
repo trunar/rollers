@@ -133,6 +133,6 @@ $ rollers 3d20 --highest 2
 
 ## To-Do
 
-- Drop Logic: Add `--drop-highest N` or `--drop-lowest N` (useful for "rolling for stats" where you roll 4d6 and drop the lowest 1).
-- Exploding Dice: Add a `-e` flag where rolling the maximum value on a die allows you to roll it again and add it to the total.
-- Multiple Arguments: Allow rolling things like `rollers 1d20+5 2d6` in one go.
+* Drop Logic: Add `--drop-highest N` or `--drop-lowest N` (useful for "rolling for stats" where you roll 4d6 and drop the lowest 1).
+* Exploding Dice: Add a `-e` flag where rolling the maximum value on a die allows you to roll it again and add it to the total.
+* Multiple Arguments: Allow rolling things like `rollers 1d20+5 2d6` in one go.
