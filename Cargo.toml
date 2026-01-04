@@ -1,10 +1,10 @@
 [package]
 name = "rollers"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2024"
 authors = ["trunar <akindyk1@gmail.com>"]
 description = "A Rust CLI dice roller"
-license = "MIT OR Apache-2.0"
+license = "MIT"
 repository = "https://github.com/trunar/rollers"
 readme = "README.md"
 keywords = ["dice", "cli", "rpg", "tabletop", "ttrpg"]
