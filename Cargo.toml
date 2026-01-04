@@ -1,0 +1,11 @@
+[package]
+name = "rollers"
+version = "1.0.0"
+edition = "2024"
+authors = ["trunar <akindyk1@gmail.com>"]
+description = "A Rust CLI dice roller"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+rand = "0.8"
+regex = "1.10"
