@@ -3,6 +3,7 @@ use rand::Rng;
 use regex::Regex;
 
 #[derive(Parser, Debug)]
+#[command(author, about, version)]
 struct Args {
     /// Dice notation (e.g., 2d6, 4dF, 1d20+5)
     input: String,
@@ -97,7 +98,7 @@ fn perform_roll(count: u32, die: &DieSides, modifier: i32, args: &Args) {
         if modifier != 0 {
             println!("  {:<10} {}", "Modifier:", if modifier >= 0 { format!("+{}", modifier) } else { modifier.to_string() });
         }
-        
+
         println!("  {:<10} \x1b[1m{}\x1b[0m", "Total:", total);
     }
 }
