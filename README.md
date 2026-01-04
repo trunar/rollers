@@ -6,13 +6,35 @@ A Rust 🦀 CLI dice roller.
 
 ## Prerequisites
 
-If you want to use Cargo for installation or to build the binaries yourself, ensure you have the Rust toolchain installed. If you don't have it yet, you can get it via rustup.rs.
+If you want to use Cargo for installation or to build the binaries yourself, ensure you have the Rust toolchain installed. If you don't have it yet, you can get it via [rustup.rs](https://rustup.rs/).
 
 ## Installation
 
 ### a. From Releases page
 
-Temporary unavailable.
+1. Download the archive for your operating system from the [Latest Release](https://github.com/trunar/rollers/releases/latest).
+2. Follow the steps for your system below:
+
+#### Linux (x86_64)
+
+The `musl` build is a static binary that works on almost any distribution.
+
+* Extract: `tar -xzvf rollers-x86_64-unknown-linux-musl.tar.gz`
+* Install: `sudo mv rollers /usr/local/bin/`
+* Permissions: `sudo chmod +x /usr/local/bin/rollers`
+
+#### macOS (Apple Silicon or Intel)
+
+* Extract: `tar -xzvf rollers-apple-darwin.tar.gz`
+* Install: `sudo mv rollers /usr/local/bin/`
+* Security: If macOS blocks the binary from running, use:
+  `xattr -d com.apple.quarantine /usr/local/bin/rollers`
+
+#### Windows (x86_64)
+
+* Extract: Right-click the `.zip` file and select "Extract All".
+* Install: Move `rollers.exe` to a folder in your System PATH (e.g., `C:\Windows\`).
+* Note: If Windows SmartScreen warns you, click "More Info" and "Run anyway".
 
 ### b. From crates.io using Cargo
 
@@ -65,6 +87,8 @@ Options:
 
 ## Examples
 
+**Standard roll (with modifier):**
+
 ```sh
 $ rollers 3d6+1
 
@@ -73,6 +97,8 @@ $ rollers 3d6+1
   Total:     19
 ```
 
+**FUDGE / Fate roll:**
+
 ```sh
 $ rollers 4dF
 
@@ -80,16 +106,22 @@ $ rollers 4dF
   Total:     1
 ```
 
+**Quiet mode (script friendly):**
+
 ```sh
 $ rollers 1d20 --quiet
 3
 ```
+
+**Average of a roll:**
 
 ```sh
 $ rollers 2d6 --average
 
   Average: 7.00
 ```
+
+**Keep 2 highest dice:**
 
 ```sh
 $ rollers 3d20 --highest 2
