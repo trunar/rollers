@@ -65,5 +65,15 @@ jobs:
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
+          name: rollers ${{ github.ref_name }}
+          draft: true
+          body: |
+            ### Exploding Dice
+
+            Added an `--exploding` flag that allows dice to be rolled again when the maximum value is hit, with additional rolls contributing to the total.
+
+            ### Repeat Roll
+
+            Added a `--repeat N` flag to roll the same dice expression multiple times, outputting each result independently.
           files: |
             target/${{ matrix.target }}/release/rollers-${{ matrix.target }}.*
