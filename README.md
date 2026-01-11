@@ -147,12 +147,16 @@ rollers 4d6 --drop-lowest 1
   Total:     13
 ```
 
+**Exploding dice (add a die each time you roll max value):**
+
 ```sh
 rollers 2d6 --exploding
 
   Pool:      5, 6, 3
   Total:     14
 ```
+
+**Repeat a roll 2 times:**
 
 ```sh
 rollers 4d6 --repeat 2             
