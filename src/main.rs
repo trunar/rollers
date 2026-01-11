@@ -12,6 +12,10 @@ struct Args {
     #[arg(short, long)]
     quiet: bool,
 
+    /// Roll again on max value
+    #[arg(short, long, conflicts_with_all = ["average"])]
+    exploding: bool,
+
     /// Show the average instead of rolling
     #[arg(short, long, conflicts_with_all = ["highest", "lowest", "drop_highest", "drop_lowest"])]
     average: bool,
@@ -67,28 +71,51 @@ fn perform_roll(count: u32, die: &DieSides, modifier: i32, args: &Args) {
     let mut rolls = Vec::new();
 
     for _ in 0..count {
-        let val = match die {
-            DieSides::Standard(s) => rng.gen_range(1..=*s) as i32,
-            DieSides::Fudge => rng.gen_range(-1..=1),
+        match die {
+            DieSides::Standard(s) => {
+                let mut roll = rng.gen_range(1..=*s) as i32;
+                rolls.push(roll);
+                
+                // Exploding logic
+                if args.exploding && *s > 1 {
+                    while roll == *s as i32 {
+                        roll = rng.gen_range(1..=*s) as i32;
+                        rolls.push(roll);
+                    }
+                }
+            }
+            DieSides::Fudge => {
+                let mut roll = rng.gen_range(-1..=1);
+                rolls.push(roll);
+                
+                // Fudge explosion
+                if args.exploding {
+                    while roll == 1 {
+                        roll = rng.gen_range(-1..=1);
+                        rolls.push(roll);
+                    }
+                }
+            }
         };
-        rolls.push(val);
     }
 
     // Keep track of original dice pool and kept dice
     let mut pool = rolls.clone();
     let mut kept = rolls.clone();
 
+    let final_count = rolls.len();
+
     // Determine the target keep count and sorting strategy
-    let (keep_count, keep_highest) = match(args.highest, args.lowest, args.drop_highest, args.drop_lowest) {
+    let (keep_count, keep_highest) = match (args.highest, args.lowest, args.drop_highest, args.drop_lowest) {
         (Some(n), _, _, _) => (n, true),
         (_, Some(n), _, _) => (n, false),
-        (_, _, Some(n), _) => (count as usize - n.min(count as usize), false),
-        (_, _, _, Some(n)) => (count as usize - n.min(count as usize), true),
-        _ => (count as usize, true), // Default: keep all
+        (_, _, Some(n), _) => (final_count.saturating_sub(n), false),
+        (_, _, _, Some(n)) => (final_count.saturating_sub(n), true),
+        _ => (final_count, true),
     };
 
     // Sort and truncate
-    if keep_count < count as usize {
+    if keep_count < final_count {
         if keep_highest {
             pool.sort_unstable_by(|a, b| b.cmp(a));
             kept.sort_unstable_by(|a, b| b.cmp(a));

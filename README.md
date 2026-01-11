@@ -80,9 +80,12 @@ Arguments:
 
 Options:
   -q, --quiet        Only show the final result
-  -a, --average      Show the average instead of rolling
-      --highest <N>  Keep only the highest N dice
-      --lowest <N>   Keep only the lowest N dice
+  -e, --exploding         Roll again on max value
+  -a, --average           Show the average instead of rolling
+      --highest <N>       Keep only the highest N dice
+      --lowest <N>        Keep only the lowest N dice
+      --drop-highest <N>  Drop the highest N dice
+      --drop-lowest <N>   Drop the lowest N dice
   -h, --help         Print help
   -V, --version      Print version
 ```
@@ -148,6 +151,6 @@ rollers 4d6 --drop-lowest 1
 ## To-Do
 
 * ✅~~Drop Logic: Add `--drop-highest N` or `--drop-lowest N` (useful for "rolling for stats" where you roll 4d6 and drop the lowest 1).~~
-* Exploding Dice: Add a `-e` flag where rolling the maximum value on a die allows you to roll it again and add it to the total.
+* ✅~~Exploding Dice: Add a `--exploding` flag where rolling the maximum value on a die allows you to roll it again and add it to the total.~~
 * Repeat Roll: Add a `--repeat N` flag to roll the same dice expression N times and output each result independently.
 * Multiple Arguments: Allow rolling things like `rollers 1d20+5 2d6` in one go.
