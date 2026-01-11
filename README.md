@@ -68,6 +68,8 @@ Once the build is complete, you can find the executable in the target/release di
 ./target/release/rollers -h
 ```
 
+---
+
 ## Usage
 
 ```sh
@@ -126,13 +128,25 @@ $ rollers 2d6 --average
 ```sh
 $ rollers 3d20 --highest 2
 
-  Pool:      4, 7, 15
+  Pool:      15, 7, 4
   Kept:      15, 7
   Total:     22
 ```
 
+**Drop 1 lowest die:**
+
+```sh
+rollers 4d6 --drop-lowest 1
+
+  Pool:      6, 5, 2, 2
+  Kept:      6, 5, 2
+  Total:     13
+```
+
+---
+
 ## To-Do
 
-* Drop Logic: Add `--drop-highest N` or `--drop-lowest N` (useful for "rolling for stats" where you roll 4d6 and drop the lowest 1).
+* ✅~~Drop Logic: Add `--drop-highest N` or `--drop-lowest N` (useful for "rolling for stats" where you roll 4d6 and drop the lowest 1).~~
 * Exploding Dice: Add a `-e` flag where rolling the maximum value on a die allows you to roll it again and add it to the total.
 * Multiple Arguments: Allow rolling things like `rollers 1d20+5 2d6` in one go.

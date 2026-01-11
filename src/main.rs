@@ -13,16 +13,24 @@ struct Args {
     quiet: bool,
 
     /// Show the average instead of rolling
-    #[arg(short, long)]
+    #[arg(short, long, conflicts_with_all = ["highest", "lowest", "drop_highest", "drop_lowest"])]
     average: bool,
 
     /// Keep only the highest N dice
-    #[arg(long, value_name = "N")]
+    #[arg(long, value_name = "N", conflicts_with_all = ["average", "lowest", "drop_highest", "drop_lowest"])]
     highest: Option<usize>,
 
     /// Keep only the lowest N dice
-    #[arg(long, value_name = "N")]
+    #[arg(long, value_name = "N", conflicts_with_all = ["average", "highest", "drop_highest", "drop_lowest"])]
     lowest: Option<usize>,
+
+    /// Drop the highest N dice
+    #[arg(long, value_name = "N", conflicts_with_all = ["average", "highest", "lowest", "drop_lowest"])]
+    drop_highest: Option<usize>,
+
+    /// Drop the lowest N dice
+    #[arg(long, value_name = "N", conflicts_with_all = ["average", "highest", "lowest", "drop_highest"])]
+    drop_lowest: Option<usize>,
 }
 
 #[derive(Debug)]
@@ -67,16 +75,28 @@ fn perform_roll(count: u32, die: &DieSides, modifier: i32, args: &Args) {
     }
 
     // Keep track of original dice pool and kept dice
-    let pool = rolls.clone();
+    let mut pool = rolls.clone();
     let mut kept = rolls.clone();
 
-    // Apply Highest/Lowest logic
-    if let Some(n) = args.highest {
-        kept.sort_by(|a, b| b.cmp(a)); // Sort descending
-        kept.truncate(n);
-    } else if let Some(n) = args.lowest {
-        kept.sort(); // Sort ascending
-        kept.truncate(n);
+    // Determine the target keep count and sorting strategy
+    let (keep_count, keep_highest) = match(args.highest, args.lowest, args.drop_highest, args.drop_lowest) {
+        (Some(n), _, _, _) => (n, true),
+        (_, Some(n), _, _) => (n, false),
+        (_, _, Some(n), _) => (count as usize - n.min(count as usize), false),
+        (_, _, _, Some(n)) => (count as usize - n.min(count as usize), true),
+        _ => (count as usize, true), // Default: keep all
+    };
+
+    // Sort and truncate
+    if keep_count < count as usize {
+        if keep_highest {
+            pool.sort_unstable_by(|a, b| b.cmp(a));
+            kept.sort_unstable_by(|a, b| b.cmp(a));
+        } else {
+            pool.sort_unstable();
+            kept.sort_unstable();
+        }
+        kept.truncate(keep_count);
     }
 
     let total: i32 = kept.iter().sum::<i32>() + modifier;
