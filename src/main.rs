@@ -16,8 +16,12 @@ struct Args {
     #[arg(short, long, conflicts_with_all = ["average"])]
     exploding: bool,
 
+    /// Repeat the roll N times
+    #[arg(short, long, value_name = "N", default_value_t = 1, conflicts_with_all = ["average"])]
+    repeat: u32,
+
     /// Show the average instead of rolling
-    #[arg(short, long, conflicts_with_all = ["highest", "lowest", "drop_highest", "drop_lowest"])]
+    #[arg(short, long, conflicts_with_all = ["highest", "lowest", "drop_highest", "drop_lowest", "exploding", "repeat"])]
     average: bool,
 
     /// Keep only the highest N dice
@@ -62,7 +66,12 @@ fn main() {
     if args.average {
         calculate_average(count, &die_type, modifier, &args);
     } else {
-        perform_roll(count, &die_type, modifier, &args);
+        for i in 0..args.repeat {
+            if !args.quiet && args.repeat > 1 {
+                println!("\n--- Roll {} ---", i + 1);
+            }
+            perform_roll(count, &die_type, modifier, &args);
+        }
     }
 }
 
